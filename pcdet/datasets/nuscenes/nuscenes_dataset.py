@@ -35,6 +35,9 @@ class NuScenesDataset(DatasetTemplate):
 
         self.infos.extend(nuscenes_infos)
         self.logger.info('Total samples for NuScenes dataset: %d' % (len(nuscenes_infos)))
+        sample_interval = self.dataset_cfg.get('SAMPLE_INTERVAL', {'train': 1, 'test':1})[mode]
+        self.infos = self.infos[::sample_interval]
+        self.logger.info(f'Using {mode}_interval={sample_interval}, sampled {len(self.infos)} samples')
 
     def balanced_infos_resampling(self, infos):
         """
